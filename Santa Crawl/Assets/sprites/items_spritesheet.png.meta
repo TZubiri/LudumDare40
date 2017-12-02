@@ -1,12 +1,12 @@
 fileFormatVersion: 2
-guid: b8cea6faf35250e45978e876430cce4f
-timeCreated: 1512192426
+guid: 0d455259f6196784e94c7ce77a91700a
+timeCreated: 1512193995
 licenseType: Free
 TextureImporter:
   fileIDToRecycleName:
-    21300000: hud_spritesheet_0
-    21300002: hud_spritesheet_1
-    21300004: hud_spritesheet_2
+    21300000: items_spritesheet_0
+    21300002: items_spritesheet_1
+    21300004: items_spritesheet_2
   serializedVersion: 4
   mipmaps:
     mipMapMode: 0
@@ -54,7 +54,7 @@ TextureImporter:
   textureFormatSet: 0
   platformSettings:
   - buildTarget: DefaultTexturePlatform
-    maxTextureSize: 2048
+    maxTextureSize: 512
     textureFormat: -1
     textureCompression: 0
     compressionQuality: 50
@@ -62,7 +62,7 @@ TextureImporter:
     allowsAlphaSplitting: 0
     overridden: 0
   - buildTarget: Standalone
-    maxTextureSize: 2048
+    maxTextureSize: 512
     textureFormat: -1
     textureCompression: 0
     compressionQuality: 50
@@ -73,39 +73,39 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: hud_spritesheet_0
+      name: items_spritesheet_0
       rect:
         serializedVersion: 2
         x: 0
-        y: 152
-        width: 76
-        height: 76
+        y: 480
+        width: 32
+        height: 32
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       tessellationDetail: 0
     - serializedVersion: 2
-      name: hud_spritesheet_1
+      name: items_spritesheet_1
       rect:
         serializedVersion: 2
-        x: 0
-        y: 76
-        width: 76
-        height: 76
+        x: 32
+        y: 480
+        width: 32
+        height: 32
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       tessellationDetail: 0
     - serializedVersion: 2
-      name: hud_spritesheet_2
+      name: items_spritesheet_2
       rect:
         serializedVersion: 2
-        x: 0
-        y: 0
-        width: 76
-        height: 76
+        x: 64
+        y: 480
+        width: 32
+        height: 32
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}

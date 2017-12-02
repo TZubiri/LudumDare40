@@ -1,12 +1,13 @@
 fileFormatVersion: 2
-guid: b8cea6faf35250e45978e876430cce4f
-timeCreated: 1512192426
+guid: 99632d1ad023a69498456defd083f374
+timeCreated: 1512194408
 licenseType: Free
 TextureImporter:
   fileIDToRecycleName:
-    21300000: hud_spritesheet_0
-    21300002: hud_spritesheet_1
-    21300004: hud_spritesheet_2
+    21300000: slime_spritesheet_0
+    21300002: slime_spritesheet_1
+    21300004: slime_spritesheet_2
+    21300006: slime_spritesheet_3
   serializedVersion: 4
   mipmaps:
     mipMapMode: 0
@@ -56,7 +57,7 @@ TextureImporter:
   - buildTarget: DefaultTexturePlatform
     maxTextureSize: 2048
     textureFormat: -1
-    textureCompression: 0
+    textureCompression: 1
     compressionQuality: 50
     crunchedCompression: 0
     allowsAlphaSplitting: 0
@@ -64,7 +65,7 @@ TextureImporter:
   - buildTarget: Standalone
     maxTextureSize: 2048
     textureFormat: -1
-    textureCompression: 0
+    textureCompression: 1
     compressionQuality: 50
     crunchedCompression: 0
     allowsAlphaSplitting: 0
@@ -73,39 +74,52 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: hud_spritesheet_0
+      name: slime_spritesheet_0
       rect:
         serializedVersion: 2
         x: 0
-        y: 152
-        width: 76
-        height: 76
+        y: 480
+        width: 32
+        height: 32
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       tessellationDetail: 0
     - serializedVersion: 2
-      name: hud_spritesheet_1
+      name: slime_spritesheet_1
       rect:
         serializedVersion: 2
         x: 0
-        y: 76
-        width: 76
-        height: 76
+        y: 448
+        width: 32
+        height: 32
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       tessellationDetail: 0
     - serializedVersion: 2
-      name: hud_spritesheet_2
+      name: slime_spritesheet_2
       rect:
         serializedVersion: 2
         x: 0
-        y: 0
-        width: 76
-        height: 76
+        y: 416
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: slime_spritesheet_3
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 384
+        width: 32
+        height: 32
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
