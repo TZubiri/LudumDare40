@@ -1,40 +1,95 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+public class MultiMove
+{
+    public int frameDuration;
+    public int framesElapsed;
+    public System.Action<float> action;
+    public System.Func<float, float> smoothingFunction;
+    public float start;
+    public float end;
 
+    public MultiMove(System.Action<float> action, int frameDuration, System.Func<float, float> smoothingFunction, float start, float end)
+    {
+        this.action = action;
+        this.frameDuration = frameDuration;
+        this.smoothingFunction = smoothingFunction;
+        this.start = start;
+        this.end = end;
+    }
+
+    public bool update()
+    {
+        float percentCompleted = this.framesElapsed / this.frameDuration;
+        if (percentCompleted <= 1f)
+        {
+            action(smoothingFunction(start + percentCompleted * (end- start)));
+
+        }
+        else
+        {
+            return false;
+        }
+        framesElapsed++;
+        return true;
+    }
+
+    public static List<MultiMove> executeMultiMoves(ref List<MultiMove> multiMoves)
+    {
+        List<MultiMove> returnList = new List<MultiMove>();
+        foreach (MultiMove move in multiMoves)
+        {
+            if(move.update() == true)
+            {
+                returnList.Add(move);
+            }
+        }
+        return returnList;
+    }
+}
 public class Movement : MonoBehaviour {
 
     public float inertia;
     public float inertiaDuration;
     public Vector3 currentVelocity;
     public float weight;
+    public float debugWeightPenalty;
+    public float debugBagSpeed;
+    public float debugSpeed;
+    public float debugDecaySpeed;
+    public List<MultiMove> multiMoves = new List<MultiMove>();
+    private int framesSinceSwingBag = 999;
+    private int swingBagDuration = 30;
+
 
     float weightPenalty()
     {
-        return Mathf.Min(1,1.05f-( this.weight/20f));
+        this.debugWeightPenalty = Mathf.Pow(Mathf.Min(1, this.weight / 20f), 2f); ;
+        return this.debugWeightPenalty;
     }
-    float maxBagSpeed()
+
+    float bagSpeed()
     {
-        return 4f + this.weight;
+        debugBagSpeed = 8f + weightPenalty() * 200f;
+        return debugBagSpeed;
     }
 
     float speed()
     {
-        return 4f * weightPenalty();
+        this.debugSpeed = 0.5f + 4f * (1 - weightPenalty());
+        return this.debugSpeed;
     }
-    float decaySpeed()
-    {
-        return speed() / 2f;
-    }
+
     Vector3 getCurrentVelocity()
     {
         return this.currentVelocity;
     }
-	// Use this for initialization
-	void Start () {
-		
-	}
-	bool upInput()
+    // Use this for initialization
+    void Start() {
+
+    }
+    bool upInput()
     {
         return Input.GetKey(KeyCode.UpArrow) || Input.GetKey(KeyCode.W);
     }
@@ -55,7 +110,7 @@ public class Movement : MonoBehaviour {
         float x = 0;
         float y = 0;
 
-        if (upInput()){
+        if (upInput()) {
             y += speed();
         }
         if (downInput())
@@ -70,27 +125,32 @@ public class Movement : MonoBehaviour {
         {
             x -= speed();
         }
-        
-        if(x == 1 && y == 1)
+
+        if (x == 1 && y == 1)
         {
             x = Mathf.Sqrt(2) / 2;
             y = Mathf.Sqrt(2) / 2;
         }
-        
+
         return new Vector3(x, y);
     }
+
+    void swingBag(float smoothing)
+    {
+        Vector3 direction;
+        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        direction = this.transform.position - ray.origin;
+        direction.Set(direction.x, direction.y, 0f);
+        this.currentVelocity = direction.normalized * bagSpeed() * -1 * smoothing;
+        framesSinceSwingBag = 0;
+    }
+
     // Update is called once per frame
     void Update() {
-        Vector3 direction;
+
         if (Input.GetKeyDown(KeyCode.Mouse1))
         {
-            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-            Debug.Log(ray.origin.ToString());
-
-            direction = this.transform.position - ray.origin;
-            this.currentVelocity = direction.normalized * speed() * (20 + this.weight) * -1;
-
-
+            multiMoves.Add(new MultiMove(swingBag, 30, Mathf.Sin, 0f, Mathf.PI));
         }
         else
         {
@@ -98,15 +158,24 @@ public class Movement : MonoBehaviour {
         }
     }
 
+
     void FixedUpdate()
     {
-
+        lockZ();
+        MultiMove.executeMultiMoves(ref multiMoves);
         this.currentVelocity = this.currentVelocity / 1.5f;
-        if(Mathf.Abs(this.currentVelocity.x) < 0.05f && Mathf.Abs(this.currentVelocity.y) < 0.05f)
+        if (Mathf.Abs(this.currentVelocity.x) < 0.05f && Mathf.Abs(this.currentVelocity.y) < 0.05f)
         {
-            this.currentVelocity = new Vector3(0,0);
+            this.currentVelocity = new Vector3(0, 0);
         }
         transform.position = transform.position + this.getCurrentVelocity() * Time.deltaTime;
+    }
+
+    private void lockZ()
+    {
+        Vector3 pos = transform.position;
+        pos.z = 0;
+        transform.position = pos;
     }
 
     void OnTriggerEnter2D(Collider2D coll)
