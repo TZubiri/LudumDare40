@@ -4,6 +4,11 @@ using UnityEngine;
 
 public class Movement : MonoBehaviour {
 
+
+    float speed()
+    {
+        return 8;
+    }
 	// Use this for initialization
 	void Start () {
 		
@@ -28,20 +33,20 @@ public class Movement : MonoBehaviour {
     void Update () {
         if (upInput() && !downInput())
         {
-            transform.position  = new Vector3(transform.position.x, transform.position.y + 1 * Time.deltaTime);
+            transform.position  = new Vector3(transform.position.x, transform.position.y + this.speed() * Time.deltaTime);
         }
         else if (!upInput() && downInput())
         {
-            transform.position = new Vector3(transform.position.x, transform.position.y - 1 * Time.deltaTime);
+            transform.position = new Vector3(transform.position.x, transform.position.y - this.speed() * Time.deltaTime);
         }
 
         if (rightInput() && !leftInput())
         {
-            transform.position = new Vector3(transform.position.x + 1 * Time.deltaTime,transform.position.y);
+            transform.position = new Vector3(transform.position.x + this.speed() * Time.deltaTime,transform.position.y);
         }
-        else if (!rightInput() && Input.GetKey(KeyCode.LeftArrow))
+        else if (!rightInput() && leftInput() )
         {
-            transform.position = new Vector3(transform.position.x - 1 * Time.deltaTime,transform.position.y);
+            transform.position = new Vector3(transform.position.x - this.speed() * Time.deltaTime,transform.position.y);
         }
 
     }
