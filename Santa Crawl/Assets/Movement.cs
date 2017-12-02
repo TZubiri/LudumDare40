@@ -8,23 +8,38 @@ public class Movement : MonoBehaviour {
 	void Start () {
 		
 	}
-	
-	// Update is called once per frame
-	void Update () {
-        if (Input.GetKey(KeyCode.UpArrow) && !Input.GetKey(KeyCode.DownArrow))
+	bool upInput()
+    {
+        return Input.GetKey(KeyCode.UpArrow) || Input.GetKey(KeyCode.W);
+    }
+    bool downInput()
+    {
+        return Input.GetKey(KeyCode.DownArrow) || Input.GetKey(KeyCode.S);
+    }
+    bool rightInput()
+    {
+        return Input.GetKey(KeyCode.RightArrow) || Input.GetKey(KeyCode.D);
+    }
+    bool leftInput()
+    {
+        return Input.GetKey(KeyCode.LeftArrow) || Input.GetKey(KeyCode.A);
+    }
+    // Update is called once per frame
+    void Update () {
+        if (upInput() && !downInput())
         {
             transform.position  = new Vector3(transform.position.x, transform.position.y + 1 * Time.deltaTime);
         }
-        else if (!Input.GetKey(KeyCode.UpArrow) && Input.GetKey(KeyCode.DownArrow))
+        else if (!upInput() && downInput())
         {
             transform.position = new Vector3(transform.position.x, transform.position.y - 1 * Time.deltaTime);
         }
 
-        if (Input.GetKey(KeyCode.RightArrow) && !Input.GetKey(KeyCode.LeftArrow))
+        if (rightInput() && !leftInput())
         {
             transform.position = new Vector3(transform.position.x + 1 * Time.deltaTime,transform.position.y);
         }
-        else if (!Input.GetKey(KeyCode.RightArrow) && Input.GetKey(KeyCode.LeftArrow))
+        else if (!rightInput() && Input.GetKey(KeyCode.LeftArrow))
         {
             transform.position = new Vector3(transform.position.x - 1 * Time.deltaTime,transform.position.y);
         }
