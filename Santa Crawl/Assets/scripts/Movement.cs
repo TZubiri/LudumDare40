@@ -4,10 +4,31 @@ using UnityEngine;
 
 public class Movement : MonoBehaviour {
 
+    public float inertia;
+    public float inertiaDuration;
+    public Vector3 currentVelocity;
+    public float weight;
+
+    float weightPenalty()
+    {
+        return Mathf.Min(1,1.05f-( this.weight/20f));
+    }
+    float maxBagSpeed()
+    {
+        return 4f + this.weight;
+    }
 
     float speed()
     {
-        return 8;
+        return 4f * weightPenalty();
+    }
+    float decaySpeed()
+    {
+        return speed() / 2f;
+    }
+    Vector3 getCurrentVelocity()
+    {
+        return this.currentVelocity;
     }
 	// Use this for initialization
 	void Start () {
@@ -29,25 +50,67 @@ public class Movement : MonoBehaviour {
     {
         return Input.GetKey(KeyCode.LeftArrow) || Input.GetKey(KeyCode.A);
     }
+
+    Vector3 inputVector() {
+        float x = 0;
+        float y = 0;
+
+        if (upInput()){
+            y += speed();
+        }
+        if (downInput())
+        {
+            y -= speed();
+        }
+        if (rightInput())
+        {
+            x += speed();
+        }
+        if (leftInput())
+        {
+            x -= speed();
+        }
+        
+        if(x == 1 && y == 1)
+        {
+            x = Mathf.Sqrt(2) / 2;
+            y = Mathf.Sqrt(2) / 2;
+        }
+        
+        return new Vector3(x, y);
+    }
     // Update is called once per frame
-    void Update () {
-        if (upInput() && !downInput())
+    void Update() {
+        bool velSign = this.currentVelocity.x < 0f;
+        bool inpSign = this.inputVector().x < 0f;
+        if ((this.currentVelocity.x != 0 && this.inputVector().x != 0  ) && (velSign != inpSign))
         {
-            transform.position  = new Vector3(transform.position.x, transform.position.y + this.speed() * Time.deltaTime);
+            this.currentVelocity.x = Mathf.Min(maxBagSpeed(), this.currentVelocity.x * -18f);
+            Debug.Log(maxBagSpeed());
+            Debug.Log(this.currentVelocity.x);
         }
-        else if (!upInput() && downInput())
+        else
         {
-            transform.position = new Vector3(transform.position.x, transform.position.y - this.speed() * Time.deltaTime);
+            this.currentVelocity += inputVector();
         }
+    }
 
-        if (rightInput() && !leftInput())
-        {
-            transform.position = new Vector3(transform.position.x + this.speed() * Time.deltaTime,transform.position.y);
-        }
-        else if (!rightInput() && leftInput() )
-        {
-            transform.position = new Vector3(transform.position.x - this.speed() * Time.deltaTime,transform.position.y);
-        }
+    void FixedUpdate()
+    {
 
+        this.currentVelocity = this.currentVelocity / 1.5f;
+        if(Mathf.Abs(this.currentVelocity.x) < 0.05f && Mathf.Abs(this.currentVelocity.y) < 0.05f)
+        {
+            this.currentVelocity = new Vector3(0,0);
+        }
+        transform.position = transform.position + this.getCurrentVelocity() * Time.deltaTime;
+    }
+
+    void OnTriggerEnter2D(Collider2D coll)
+    {
+        if (coll.tag == "item") {
+            coll.gameObject.SetActive(false);
+            this.weight++;
+        }
     }
 }
