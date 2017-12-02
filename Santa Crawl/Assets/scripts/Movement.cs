@@ -81,13 +81,16 @@ public class Movement : MonoBehaviour {
     }
     // Update is called once per frame
     void Update() {
-        bool velSign = this.currentVelocity.x < 0f;
-        bool inpSign = this.inputVector().x < 0f;
-        if ((this.currentVelocity.x != 0 && this.inputVector().x != 0  ) && (velSign != inpSign))
+        Vector3 direction;
+        if (Input.GetKeyDown(KeyCode.Mouse1))
         {
-            this.currentVelocity.x = Mathf.Min(maxBagSpeed(), this.currentVelocity.x * -18f);
-            Debug.Log(maxBagSpeed());
-            Debug.Log(this.currentVelocity.x);
+            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            Debug.Log(ray.origin.ToString());
+
+            direction = this.transform.position - ray.origin;
+            this.currentVelocity = direction.normalized * speed() * (20 + this.weight) * -1;
+
+
         }
         else
         {
