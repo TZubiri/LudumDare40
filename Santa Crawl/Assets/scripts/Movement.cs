@@ -35,7 +35,7 @@ public class MultiMove
         return true;
     }
 
-    public static List<MultiMove> executeMultiMoves(ref List<MultiMove> multiMoves)
+    public static List<MultiMove> executeMultiMoves(List<MultiMove> multiMoves)
     {
         List<MultiMove> returnList = new List<MultiMove>();
         foreach (MultiMove move in multiMoves)
@@ -162,7 +162,7 @@ public class Movement : MonoBehaviour {
     void FixedUpdate()
     {
         lockZ();
-        MultiMove.executeMultiMoves(ref multiMoves);
+        multiMoves = MultiMove.executeMultiMoves(multiMoves);
         this.currentVelocity = this.currentVelocity / 1.5f;
         if (Mathf.Abs(this.currentVelocity.x) < 0.05f && Mathf.Abs(this.currentVelocity.y) < 0.05f)
         {
